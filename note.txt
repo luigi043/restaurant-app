@@ -1,0 +1,32 @@
+src/
+├── app/
+│   ├── components/
+│   │   ├── shared/
+│   │   │   ├── header/
+│   │   │   ├── footer/
+│   │   │   ├── cart/
+│   │   │   └── loading/
+│   │   ├── home/
+│   │   ├── menu/
+│   │   ├── cart/
+│   │   ├── checkout/
+│   │   └── reservation/
+│   ├── services/
+│   │   ├── data.service.ts
+│   │   ├── cart.service.ts
+│   │   └── reservation.service.ts
+│   ├── models/
+│   │   ├── dish.model.ts
+│   │   └── reservation.model.ts
+│   ├── guards/
+│   │   └── checkout.guard.ts
+│   ├── utils/
+│   │   └── validators.ts
+│   ├── app.config.ts
+│   ├── app.routes.ts
+│   └── app.component.ts
+├── assets/
+│   ├── images/
+│   └── data/
+└── styles/
+    └── styles.scss
