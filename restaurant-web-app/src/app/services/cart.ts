@@ -59,7 +59,12 @@ export class CartService {
       return total + (item.prato.preco * item.quantidade);
     }, 0);
   }
-
+  formatarTotal(total: number): string {
+  return `${total.toFixed(2).replace('.', ',')} €`;
+}
+formatarPreco(preco: number): string {
+  return `${preco.toFixed(2).replace('.', ',')} €`;
+}
   contarItens(): number {
     return this.itensCarrinho.reduce((total, item) => total + item.quantidade, 0);
   }

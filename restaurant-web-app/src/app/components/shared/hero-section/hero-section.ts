@@ -19,9 +19,9 @@ export class HeroSectionComponent {
 
   // Características do restaurante
   caracteristicas = [
-    { icone: '🍴', texto: 'Culinária Italiana Autêntica' },
-    { icone: '🍷', texto: 'Adega com 200+ vinhos' },
-    { icone: '🎵', texto: 'Música ao vivo aos sábados' },
-    { icone: '🌿', texto: 'Ingredientes frescos e locais' }
+    { icone: '🇮🇹', texto: 'Culinária Italiana Autêntica' },
+    { icone: '🍝', texto: 'Massas Feitas na Hora' },
+    { icone: '🍷', texto: 'Adega com Vinhos Italianos' },
+    { icone: '👨‍🍳', texto: 'Chef Italiano Experiente' }
   ];
 }

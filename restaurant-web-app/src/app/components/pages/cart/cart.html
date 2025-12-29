@@ -1,1 +1,133 @@
-<p>cart works!</p>
+<div class="cart-page">
+  <!-- Cabeçalho da página -->
+  <header class="page-header">
+    <div class="container">
+      <h1 class="page-title">🛒 Seu Carrinho</h1>
+      <p class="page-subtitle">Revise seus itens antes de finalizar o pedido</p>
+    </div>
+  </header>
+
+  <div class="container cart-container">
+    <!-- Carrinho vazio -->
+    <div class="empty-cart" *ngIf="itensCarrinho.length === 0">
+      <div class="empty-icon">🛒</div>
+      <h2>Seu carrinho está vazio</h2>
+      <p>Adicione deliciosos pratos do nosso cardápio!</p>
+      <div class="empty-actions">
+        <button class="btn btn-primary" (click)="continuarComprando()">
+          Explorar Cardápio
+        </button>
+      </div>
+    </div>
+
+    <!-- Carrinho com itens -->
+    <div *ngIf="itensCarrinho.length > 0" class="cart-with-items">
+      <div class="cart-layout">
+        <!-- Lista de itens -->
+        <main class="cart-items">
+          <!-- Cabeçalho da lista -->
+          <div class="cart-header">
+            <h2 class="cart-title">
+              Seus Itens <span class="item-count">({{ itensCarrinho.length }})</span>
+            </h2>
+            <button
+              class="btn-clear-cart"
+              (click)="limparCarrinho()"
+              aria-label="Esvaziar carrinho">
+              🗑️ Limpar Carrinho
+            </button>
+          </div>
+
+          <!-- Lista de itens -->
+          <div class="items-list">
+            <app-cart-item
+              *ngFor="let item of itensCarrinho"
+              [item]="item"
+              (quantidadeAlterada)="atualizarQuantidade(item.prato.id, $event)"
+              (itemRemovido)="removerItem(item.prato.id)">
+            </app-cart-item>
+          </div>
+
+          <!-- Botão para continuar comprando -->
+          <div class="continue-shopping">
+            <button class="btn btn-outline" (click)="continuarComprando()">
+              ← Continuar Comprando
+            </button>
+          </div>
+        </main>
+
+        <!-- Resumo do pedido -->
+        <aside class="order-summary">
+          <div class="summary-card">
+            <h3 class="summary-title">📋 Resumo do Pedido</h3>
+
+            <!-- Detalhes do pedido -->
+            <div class="summary-details">
+              <!-- Subtotal -->
+              <div class="summary-row">
+                <span class="label">Subtotal</span>
+                <span class="value">{{ formatarPreco(subtotal) }}</span>
+              </div>
+
+              <!-- Taxa de entrega -->
+              <div class="summary-row">
+                <span class="label">Taxa de Entrega</span>
+                <span class="value" [class.free]="temEntregaGratis">
+                  {{ taxaEntrega === 0 ? 'Grátis' : formatarPreco(taxaEntrega) }}
+                </span>
+              </div>
+
+              <!-- Mensagem entrega grátis -->
+              <div *ngIf="!temEntregaGratis && subtotal > 0" class="delivery-message">
+                <span class="message-icon">🚚</span>
+                <span class="message-text">
+                  Faltam {{ formatarPreco(faltaParaEntregaGratis) }} para entrega grátis!
+                </span>
+              </div>
+
+              <!-- Total -->
+              <div class="summary-row total">
+                <span class="label">Total</span>
+                <span class="value">{{ formatarPreco(total) }}</span>
+              </div>
+            </div>
+
+            <!-- Botão de finalizar -->
+            <button
+              class="btn btn-primary btn-checkout"
+              (click)="prosseguirCheckout()">
+              Finalizar Pedido
+            </button>
+
+            <!-- Métodos de pagamento -->
+            <div class="payment-methods">
+              <p class="methods-title">Métodos de pagamento aceitos:</p>
+              <div class="methods-icons">
+                <span class="method-icon">💳</span>
+                <span class="method-icon">📱</span>
+                <span class="method-icon">🏦</span>
+                <span class="method-icon">💰</span>
+              </div>
+            </div>
+
+            <!-- Informações adicionais -->
+            <div class="additional-info">
+              <div class="info-item">
+                <span class="info-icon">⏰</span>
+                <span class="info-text">Entrega em 30-45 minutos</span>
+              </div>
+              <div class="info-item">
+                <span class="info-icon">🔄</span>
+                <span class="info-text">Cancelamento grátis em 10 minutos</span>
+              </div>
+              <div class="info-item">
+                <span class="info-icon">🔒</span>
+                <span class="info-text">Compra 100% segura</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</div>

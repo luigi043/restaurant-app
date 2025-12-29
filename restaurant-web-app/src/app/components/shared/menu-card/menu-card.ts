@@ -27,8 +27,9 @@ export class MenuCardComponent {
     return this.prato.picante;
   }
 
-  formatarPreco(preco: number): string {
-    return `R$ ${preco.toFixed(2).replace('.', ',')}`;
+// Atualize o método formatarPreco
+formatarPreco(preco: number): string {
+  return `${preco.toFixed(2).replace('.', ',')} €`;
   }
 
   getCategoriaIcon(categoria: string): string {

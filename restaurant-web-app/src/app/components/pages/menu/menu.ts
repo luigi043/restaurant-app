@@ -31,7 +31,7 @@ export class MenuComponent implements OnInit {
     vegetariano: false,
     picante: false,
     precoMin: 0,
-    precoMax: 200
+    precoMax: 50
   };
 
   // Estado da aplicação
@@ -92,7 +92,7 @@ export class MenuComponent implements OnInit {
       vegetariano: false,
       picante: false,
       precoMin: 0,
-      precoMax: 200
+      precoMax: 50
     };
     this.categoriaSelecionada = 'todas';
     this.pratosFiltrados = [...this.todosPratos];
@@ -124,7 +124,7 @@ export class MenuComponent implements OnInit {
     }
 
     // Filtrar por preço máximo
-    if (this.filtrosAtivos.precoMax < 200) {
+    if (this.filtrosAtivos.precoMax < 50) {
       resultado = resultado.filter(p => p.preco <= this.filtrosAtivos.precoMax);
     }
 
@@ -150,7 +150,7 @@ export class MenuComponent implements OnInit {
   }
 
   // Formatar preço
-  formatarPreco(preco: number): string {
-    return `R$ ${preco.toFixed(2).replace('.', ',')}`;
-  }
+ formatarPreco(preco: number): string {
+  return `${preco.toFixed(2).replace('.', ',')} €`;
+}
 }

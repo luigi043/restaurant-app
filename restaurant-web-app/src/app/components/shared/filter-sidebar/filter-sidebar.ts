@@ -16,13 +16,13 @@ export class FilterSidebarComponent {
   @Output() filtrosLimpos = new EventEmitter<void>();
 
   // Valores iniciais dos filtros
-  filtros = {
-    categoria: '',
-    vegetariano: false,
-    picante: false,
-    precoMin: 0,
-    precoMax: 200
-  };
+filtros = {
+  categoria: '',
+  vegetariano: false,
+  picante: false,
+  precoMin: 0,
+  precoMax: 50 // Alterado de 200 para 50 €
+};
 
   // Aplicar filtros
   aplicarFiltros() {
@@ -42,9 +42,9 @@ export class FilterSidebarComponent {
   }
 
   // Formatar preço para exibição
-  formatarPreco(preco: number): string {
-    return `R$ ${preco.toFixed(2).replace('.', ',')}`;
-  }
+ formatarPreco(preco: number): string {
+  return `${preco.toFixed(2).replace('.', ',')} €`;
+}
 
   // Getter para valor atual do preço mínimo
   get precoMinValue(): number {

@@ -1,1 +1,82 @@
-<p>cart-item works!</p>
+<div class="cart-item">
+  <!-- Imagem do prato -->
+  <div class="item-image">
+    <img [src]="item.prato.imagem" [alt]="item.prato.nome" class="dish-image">
+  </div>
+
+  <!-- Informações do item -->
+  <div class="item-info">
+    <div class="item-header">
+      <h3 class="item-name">{{ item.prato.nome }}</h3>
+      <button
+        class="btn-remove"
+        (click)="removerItem()"
+        aria-label="Remover {{ item.prato.nome }} do carrinho">
+        ✕
+      </button>
+    </div>
+
+    <p class="item-description">{{ item.prato.descricao }}</p>
+
+    <!-- Badges -->
+    <div class="item-badges">
+      <span class="badge categoria" [class]="item.prato.categoria">
+        {{ item.prato.categoria | titlecase }}
+      </span>
+
+      <span *ngIf="item.prato.vegetariano" class="badge vegetariano">
+        🌱 Vegetariano
+      </span>
+
+      <span *ngIf="item.prato.picante" class="badge picante">
+        🌶️ Picante
+      </span>
+    </div>
+  </div>
+
+  <!-- Controle de quantidade -->
+  <div class="item-quantity">
+    <div class="quantity-controls">
+      <button
+        class="btn-quantity btn-decrease"
+        (click)="diminuirQuantidade()"
+        [disabled]="quantidade <= 1"
+        aria-label="Diminuir quantidade">
+        −
+      </button>
+
+      <input
+        type="number"
+        [value]="quantidade"
+        (change)="atualizarQuantidade($event)"
+        min="1"
+        max="99"
+        class="quantity-input"
+        aria-label="Quantidade de {{ item.prato.nome }}">
+
+      <button
+        class="btn-quantity btn-increase"
+        (click)="aumentarQuantidade()"
+        aria-label="Aumentar quantidade">
+        +
+      </button>
+    </div>
+
+    <button class="btn-remove-mobile" (click)="removerItem()">
+      Remover
+    </button>
+  </div>
+
+  <!-- Preço e subtotal -->
+  <div class="item-pricing">
+    <div class="price-section">
+      <span class="price-label">Preço unitário:</span>
+      <span class="unit-price">{{ formatarPreco(item.prato.preco) }}</span>
+    </div>
+
+    <div class="price-section subtotal">
+      <span class="price-label">Subtotal:</span>
+      <span class="subtotal-price">{{ formatarPreco(calcularSubtotal()) }}</span>
+    </div>
+  </div>
+</div>

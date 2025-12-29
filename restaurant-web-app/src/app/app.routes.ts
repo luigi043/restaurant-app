@@ -12,11 +12,11 @@ export const routes: Routes = [
   },
   {
     path: 'menu',
-    loadComponent: () => import('./components/pages/menu/menu').then(m => m.Menu)
+    loadComponent: () => import('./components/pages/menu/menu').then(m => m.MenuComponent)
   },
   {
     path: 'cart',
-    loadComponent: () => import('./components/pages/cart/cart').then(m => m.Cart)
+    loadComponent: () => import('./components/pages/cart/cart').then(m => m.CartComponent)
   },
   {
     path: 'checkout',
