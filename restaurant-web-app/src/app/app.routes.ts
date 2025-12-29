@@ -20,15 +20,15 @@ export const routes: Routes = [
   },
   {
     path: 'checkout',
-    loadComponent: () => import('./components/pages/checkout/checkout').then(m => m.Checkout)
+    loadComponent: () => import('./components/pages/checkout/checkout').then(m => m.CheckoutComponent)
   },
   {
     path: 'reservation',
-    loadComponent: () => import('./components/pages/reservation/reservation').then(m => m.Reservation)
+    loadComponent: () => import('./components/pages/reservation/reservation').then(m => m.ReservationComponent)
   },
   {
     path: 'dish/:id',
-    loadComponent: () => import('./components/pages/dish-detail/dish-detail').then(m => m.DishDetail)
+    loadComponent: () => import('./components/pages/dish-detail/dish-detail').then(m => m.DishDetailComponent)
   },
   {
     path: '**',

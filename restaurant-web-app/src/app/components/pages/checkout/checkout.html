@@ -1,1 +1,447 @@
-<p>checkout works!</p>
+<div class="checkout-page">
+  <!-- Cabeçalho da página -->
+  <header class="page-header">
+    <div class="container">
+      <h1 class="page-title">✅ Finalizar Pedido</h1>
+      <p class="page-subtitle">Complete suas informações para receber seu pedido italiano</p>
+    </div>
+  </header>
+
+  <div class="container checkout-container">
+    <!-- Etapas do checkout -->
+    <div class="checkout-steps">
+      <div *ngFor="let etapa of etapas" class="step" [class.active]="etapa.ativa" [class.completed]="etapa.concluida">
+        <div class="step-number">{{ etapa.id }}</div>
+        <div class="step-label">{{ etapa.nome }}</div>
+      </div>
+    </div>
+
+    <!-- Conteúdo principal -->
+    <div class="checkout-content" *ngIf="!pedidoRealizado">
+      <div class="checkout-layout">
+        <!-- Formulário -->
+        <main class="checkout-form">
+          <!-- Etapa 1: Dados de Entrega -->
+          <div *ngIf="etapaAtual === 1" class="form-section">
+            <h2 class="section-title">📍 Dados de Entrega</h2>
+            <p class="section-subtitle">Informe onde deseja receber seu pedido</p>
+
+            <form [formGroup]="dadosEntregaForm" class="delivery-form">
+              <!-- Informações pessoais -->
+              <div class="form-group">
+                <label for="nome">Nome Completo *</label>
+                <input
+                  type="text"
+                  id="nome"
+                  formControlName="nome"
+                  placeholder="Digite seu nome completo"
+                  [class.invalid]="f['nome'].invalid && f['nome'].touched">
+                <div *ngIf="f['nome'].invalid && f['nome'].touched" class="error-message">
+                  <span *ngIf="f['nome'].errors?.['required']">Nome é obrigatório</span>
+                  <span *ngIf="f['nome'].errors?.['minlength']">Nome deve ter pelo menos 3 caracteres</span>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="email">E-mail *</label>
+                  <input
+                    type="email"
+                    id="email"
+                    formControlName="email"
+                    placeholder="seu@email.com"
+                    [class.invalid]="f['email'].invalid && f['email'].touched">
+                  <div *ngIf="f['email'].invalid && f['email'].touched" class="error-message">
+                    <span *ngIf="f['email'].errors?.['required']">E-mail é obrigatório</span>
+                    <span *ngIf="f['email'].errors?.['email']">Digite um e-mail válido</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="telefone">Telefone *</label>
+                  <input
+                    type="tel"
+                    id="telefone"
+                    formControlName="telefone"
+                    placeholder="(11) 99999-9999"
+                    [class.invalid]="f['telefone'].invalid && f['telefone'].touched">
+                  <div *ngIf="f['telefone'].invalid && f['telefone'].touched" class="error-message">
+                    <span *ngIf="f['telefone'].errors?.['required']">Telefone é obrigatório</span>
+                    <span *ngIf="f['telefone'].errors?.['pattern']">Digite um telefone válido</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Endereço -->
+              <div class="form-group">
+                <label for="endereco">Endereço *</label>
+                <input
+                  type="text"
+                  id="endereco"
+                  formControlName="endereco"
+                  placeholder="Rua, Avenida, etc."
+                  [class.invalid]="f['endereco'].invalid && f['endereco'].touched">
+                <div *ngIf="f['endereco'].invalid && f['endereco'].touched" class="error-message">
+                  <span *ngIf="f['endereco'].errors?.['required']">Endereço é obrigatório</span>
+                  <span *ngIf="f['endereco'].errors?.['minlength']">Endereço muito curto</span>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="numero">Número *</label>
+                  <input
+                    type="text"
+                    id="numero"
+                    formControlName="numero"
+                    placeholder="123"
+                    [class.invalid]="f['numero'].invalid && f['numero'].touched">
+                  <div *ngIf="f['numero'].invalid && f['numero'].touched" class="error-message">
+                    Número é obrigatório
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="complemento">Complemento</label>
+                  <input
+                    type="text"
+                    id="complemento"
+                    formControlName="complemento"
+                    placeholder="Apto, Bloco, etc.">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="bairro">Bairro *</label>
+                  <input
+                    type="text"
+                    id="bairro"
+                    formControlName="bairro"
+                    placeholder="Digite seu bairro"
+                    [class.invalid]="f['bairro'].invalid && f['bairro'].touched">
+                  <div *ngIf="f['bairro'].invalid && f['bairro'].touched" class="error-message">
+                    Bairro é obrigatório
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="cidade">Cidade *</label>
+                  <input
+                    type="text"
+                    id="cidade"
+                    formControlName="cidade"
+                    placeholder="Digite sua cidade"
+                    [class.invalid]="f['cidade'].invalid && f['cidade'].touched">
+                  <div *ngIf="f['cidade'].invalid && f['cidade'].touched" class="error-message">
+                    Cidade é obrigatório
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="cep">CEP *</label>
+                  <input
+                    type="text"
+                    id="cep"
+                    formControlName="cep"
+                    placeholder="00000-000"
+                    [class.invalid]="f['cep'].invalid && f['cep'].touched">
+                  <div *ngIf="f['cep'].invalid && f['cep'].touched" class="error-message">
+                    <span *ngIf="f['cep'].errors?.['required']">CEP é obrigatório</span>
+                    <span *ngIf="f['cep'].errors?.['pattern']">Formato: 00000-000</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Observações -->
+              <div class="form-group">
+                <label for="observacoes">Observações</label>
+                <textarea
+                  id="observacoes"
+                  formControlName="observacoes"
+                  placeholder="Instruções especiais para a entrega..."
+                  rows="3"></textarea>
+              </div>
+            </form>
+          </div>
+
+          <!-- Etapa 2: Pagamento -->
+          <div *ngIf="etapaAtual === 2" class="form-section">
+            <h2 class="section-title">💳 Forma de Pagamento</h2>
+            <p class="section-subtitle">Escolha como deseja pagar seu pedido</p>
+
+            <!-- Métodos de pagamento -->
+            <div class="payment-methods">
+              <div *ngFor="let metodo of metodosPagamento"
+                   class="payment-method"
+                   [class.selected]="metodoPagamentoSelecionado === metodo.id"
+                   (click)="metodoPagamentoSelecionado = metodo.id">
+                <span class="method-icon">{{ metodo.icone }}</span>
+                <span class="method-name">{{ metodo.nome }}</span>
+                <span class="method-check">✓</span>
+              </div>
+            </div>
+
+            <!-- Formulário do cartão (se selecionado) -->
+            <div *ngIf="metodoPagamentoSelecionado === 'cartao'" class="card-form">
+              <form [formGroup]="pagamentoForm" class="credit-card-form">
+                <div class="form-group">
+                  <label for="numeroCartao">Número do Cartão *</label>
+                  <input
+                    type="text"
+                    id="numeroCartao"
+                    formControlName="numeroCartao"
+                    placeholder="0000 0000 0000 0000"
+                    maxlength="16"
+                    [class.invalid]="p['numeroCartao'].invalid && p['numeroCartao'].touched">
+                  <div *ngIf="p['numeroCartao'].invalid && p['numeroCartao'].touched" class="error-message">
+                    <span *ngIf="p['numeroCartao'].errors?.['required']">Número do cartão é obrigatório</span>
+                    <span *ngIf="p['numeroCartao'].errors?.['pattern']">Digite 16 números</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="nomeCartao">Nome no Cartão *</label>
+                  <input
+                    type="text"
+                    id="nomeCartao"
+                    formControlName="nomeCartao"
+                    placeholder="Como está no cartão"
+                    [class.invalid]="p['nomeCartao'].invalid && p['nomeCartao'].touched">
+                  <div *ngIf="p['nomeCartao'].invalid && p['nomeCartao'].touched" class="error-message">
+                    <span *ngIf="p['nomeCartao'].errors?.['required']">Nome é obrigatório</span>
+                    <span *ngIf="p['nomeCartao'].errors?.['minlength']">Nome muito curto</span>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="validade">Validade (MM/AA) *</label>
+                    <input
+                      type="text"
+                      id="validade"
+                      formControlName="validade"
+                      placeholder="MM/AA"
+                      maxlength="5"
+                      [class.invalid]="p['validade'].invalid && p['validade'].touched">
+                    <div *ngIf="p['validade'].invalid && p['validade'].touched" class="error-message">
+                      <span *ngIf="p['validade'].errors?.['required']">Validade é obrigatória</span>
+                      <span *ngIf="p['validade'].errors?.['pattern']">Formato: MM/AA</span>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="cvv">CVV *</label>
+                    <input
+                      type="password"
+                      id="cvv"
+                      formControlName="cvv"
+                      placeholder="123"
+                      maxlength="4"
+                      [class.invalid]="p['cvv'].invalid && p['cvv'].touched">
+                    <div *ngIf="p['cvv'].invalid && p['cvv'].touched" class="error-message">
+                      <span *ngIf="p['cvv'].errors?.['required']">CVV é obrigatório</span>
+                      <span *ngIf="p['cvv'].errors?.['pattern']">3 ou 4 números</span>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <!-- Informações de segurança -->
+            <div class="security-info">
+              <div class="security-item">
+                <span class="security-icon">🔒</span>
+                <span class="security-text">Pagamento 100% seguro</span>
+              </div>
+              <div class="security-item">
+                <span class="security-icon">🛡️</span>
+                <span class="security-text">Dados criptografados</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Etapa 3: Confirmação -->
+          <div *ngIf="etapaAtual === 3" class="form-section">
+            <h2 class="section-title">📋 Resumo do Pedido</h2>
+            <p class="section-subtitle">Confirme todas as informações antes de finalizar</p>
+
+            <div class="order-summary">
+              <!-- Dados do cliente -->
+              <div class="summary-section">
+                <h3>👤 Dados do Cliente</h3>
+                <div class="summary-content">
+                  <p><strong>Nome:</strong> {{ dadosEntregaForm.get('nome')?.value }}</p>
+                  <p><strong>E-mail:</strong> {{ dadosEntregaForm.get('email')?.value }}</p>
+                  <p><strong>Telefone:</strong> {{ dadosEntregaForm.get('telefone')?.value }}</p>
+                </div>
+              </div>
+
+              <!-- Endereço de entrega -->
+              <div class="summary-section">
+                <h3>📍 Endereço de Entrega</h3>
+                <div class="summary-content">
+                  <p>{{ dadosEntregaForm.get('endereco')?.value }}, {{ dadosEntregaForm.get('numero')?.value }}</p>
+                  <p *ngIf="dadosEntregaForm.get('complemento')?.value">
+                    Complemento: {{ dadosEntregaForm.get('complemento')?.value }}
+                  </p>
+                  <p>{{ dadosEntregaForm.get('bairro')?.value }} - {{ dadosEntregaForm.get('cidade')?.value }}</p>
+                  <p>CEP: {{ dadosEntregaForm.get('cep')?.value }}</p>
+                </div>
+              </div>
+
+              <!-- Forma de pagamento -->
+              <div class="summary-section">
+                <h3>💳 Forma de Pagamento</h3>
+                <div class="summary-content">
+                  <p><strong>Método:</strong>
+                    {{ metodosPagamento.find(m => m.id === metodoPagamentoSelecionado)?.nome }}
+                  </p>
+                  <p *ngIf="metodoPagamentoSelecionado === 'cartao'">
+                    <strong>Cartão:</strong>
+                    **** **** **** {{ pagamentoForm.get('numeroCartao')?.value?.slice(-4) }}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Itens do pedido -->
+              <div class="summary-section">
+                <h3>🍝 Itens do Pedido</h3>
+                <div class="order-items">
+                  <div *ngFor="let item of itensCarrinho" class="order-item">
+                    <span class="item-name">{{ item.prato.nome }} × {{ item.quantidade }}</span>
+                    <span class="item-price">{{ formatarPreco(item.prato.preco * item.quantidade) }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Total -->
+              <div class="summary-total">
+                <div class="total-row">
+                  <span>Subtotal:</span>
+                  <span>{{ formatarPreco(subtotal) }}</span>
+                </div>
+                <div class="total-row">
+                  <span>Taxa de Entrega:</span>
+                  <span [class.free]="temEntregaGratis">
+                    {{ taxaEntrega === 0 ? 'Grátis' : formatarPreco(taxaEntrega) }}
+                  </span>
+                </div>
+                <div class="total-row final">
+                  <span>Total:</span>
+                  <span>{{ formatarPreco(total) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <!-- Resumo do carrinho -->
+        <aside class="order-sidebar">
+          <div class="sidebar-card">
+            <h3 class="sidebar-title">📦 Seu Pedido</h3>
+
+            <!-- Itens -->
+            <div class="sidebar-items">
+              <div *ngFor="let item of itensCarrinho" class="sidebar-item">
+                <div class="item-info">
+                  <span class="item-name">{{ item.prato.nome }}</span>
+                  <span class="item-quantity">× {{ item.quantidade }}</span>
+                </div>
+                <span class="item-price">{{ formatarPreco(item.prato.preco * item.quantidade) }}</span>
+              </div>
+            </div>
+
+            <!-- Totais -->
+            <div class="sidebar-totals">
+              <div class="total-row">
+                <span>Subtotal</span>
+                <span>{{ formatarPreco(subtotal) }}</span>
+              </div>
+              <div class="total-row">
+                <span>Taxa de Entrega</span>
+                <span [class.free]="temEntregaGratis">
+                  {{ taxaEntrega === 0 ? 'Grátis' : formatarPreco(taxaEntrega) }}
+                </span>
+              </div>
+              <div class="total-row final">
+                <span>Total</span>
+                <span>{{ formatarPreco(total) }}</span>
+              </div>
+            </div>
+
+            <!-- Botões de navegação -->
+            <div class="sidebar-actions">
+              <button *ngIf="etapaAtual > 1"
+                      class="btn btn-secondary"
+                      (click)="voltarEtapa()">
+                ← Voltar
+              </button>
+
+              <button *ngIf="etapaAtual < 3"
+                      class="btn btn-primary"
+                      (click)="avancarEtapa()"
+                      [disabled]="(etapaAtual === 1 && !dadosEntregaForm.valid) ||
+                                 (etapaAtual === 2 && metodoPagamentoSelecionado === 'cartao' && !pagamentoForm.valid)">
+                Continuar →
+              </button>
+
+              <button *ngIf="etapaAtual === 3"
+                      class="btn btn-primary btn-finalize"
+                      (click)="finalizarPedido()"
+                      [disabled]="carregando">
+                <span *ngIf="!carregando">✅ Finalizar Pedido</span>
+                <span *ngIf="carregando">Processando...</span>
+              </button>
+            </div>
+
+            <!-- Voltar para carrinho -->
+            <button class="btn-back" (click)="voltarParaCarrinho()">
+              ← Alterar itens do pedido
+            </button>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Confirmação do pedido -->
+    <div *ngIf="pedidoRealizado" class="order-confirmation">
+      <div class="confirmation-card">
+        <div class="confirmation-icon">🎉</div>
+        <h2>Pedido Confirmado!</h2>
+        <p class="confirmation-subtitle">Seu pedido italiano está a caminho</p>
+
+        <div class="confirmation-details">
+          <div class="detail-item">
+            <span class="detail-label">Número do Pedido:</span>
+            <span class="detail-value">{{ numeroPedido }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Previsão de Entrega:</span>
+            <span class="detail-value">30-45 minutos</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Valor Total:</span>
+            <span class="detail-value">{{ formatarPreco(total) }}</span>
+          </div>
+        </div>
+
+        <div class="confirmation-message">
+          <p>Obrigado por escolher a <strong>Trattoria Bella Italia</strong>!</p>
+          <p>Você receberá um e-mail com todos os detalhes do seu pedido.</p>
+        </div>
+
+        <div class="confirmation-actions">
+          <button class="btn btn-primary" (click)="fazerNovoPedido()">
+            🍝 Fazer Novo Pedido
+          </button>
+          <button class="btn btn-secondary" routerLink="/home">
+            🏠 Voltar para Início
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
