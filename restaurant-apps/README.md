@@ -1,8 +1,4 @@
-Vou criar um README completo para seu projeto Angular do restaurante italiano!
 
-## ARQUIVO: `README.md`
-
-```markdown
 # 🍝 Trattoria Bella Italia - Restaurant Web App
 ![alt text](image.png)
 ![Angular](https://img.shields.io/badge/Angular-17+-DD0031?style=for-the-badge&logo=angular&logoColor=white)
