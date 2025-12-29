@@ -3,11 +3,11 @@
   "version": 1,
   "cli": {
     "packageManager": "npm",
-    "analytics": "e1a5f70b-f829-4228-bdcc-36ba9087f2a6"
+    "analytics": "3dd398e6-66ec-4250-afc6-d3d7dbce671e"
   },
   "newProjectRoot": "projects",
   "projects": {
-    "restaurant-app-fixed": {
+    "restaurant-web-app": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -89,10 +89,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "restaurant-app-fixed:build:production"
+              "buildTarget": "restaurant-web-app:build:production"
             },
             "development": {
-              "buildTarget": "restaurant-app-fixed:build:development"
+              "buildTarget": "restaurant-web-app:build:development"
             }
           },
           "defaultConfiguration": "development"

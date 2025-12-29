@@ -1,20 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { CartSidebarComponent } from "./pages/cart-sidebar/cart-sidebar";
-import { FooterComponent } from "./components/footer/footer";
-import { HeaderComponent } from "./components/header/header";
+import { HeaderComponent } from './components/layout/header/header';
+import {  FooterComponent } from "./components/layout/footer/footer";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    CartSidebarComponent,
-    FooterComponent,
-    HeaderComponent
-],
+  imports: [CommonModule, RouterOutlet, HeaderComponent,  FooterComponent],
   template: `
     <div class="app-container">
       <app-header></app-header>
@@ -24,24 +17,21 @@ import { HeaderComponent } from "./components/header/header";
       </main>
 
       <app-footer></app-footer>
-
-      <!-- Carrinho Sidebar (controlado por serviço) -->
-      <app-cart-sidebar *ngIf="showCartSidebar"></app-cart-sidebar>
     </div>
   `,
   styles: [`
     .app-container {
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
+      min-height: 100vh;
     }
 
     .main-content {
       flex: 1;
+      padding-top: 20px;
     }
   `]
 })
 export class AppComponent {
-   title = 'Restaurante App';
-  showCartSidebar = false;
+  title = 'Restaurante Sabor & Arte';
 }

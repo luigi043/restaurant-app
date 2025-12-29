@@ -1,0 +1,42 @@
+<div class="promo-banner" [class.invalida]="!estaValida">
+  <div class="promo-content">
+    <!-- Cabeçalho da promoção -->
+    <div class="promo-header">
+      <span class="discount-badge">
+        {{ promocao.desconto }}% OFF
+      </span>
+
+      <span class="validity" *ngIf="estaValida">
+        ⏳ Válido até {{ formatarData(promocao.validoAte) }}
+        <span class="days-left">({{ diasRestantes }} dias)</span>
+      </span>
+
+      <span class="validity expired" *ngIf="!estaValida">
+        ⚠️ Promoção expirada
+      </span>
+    </div>
+
+    <!-- Título e descrição -->
+    <h3 class="promo-title">{{ promocao.titulo }}</h3>
+
+    <p class="promo-description">{{ promocao.descricao }}</p>
+
+    <!-- Código da promoção -->
+    <div class="promo-code">
+      <span class="code-label">Código:</span>
+      <span class="code-value">{{ promocao.codigo }}</span>
+      <button
+        class="btn-copy"
+        (click)="copiarCodigo()"
+        [attr.aria-label]="'Copiar código ' + promocao.codigo">
+        📋 Copiar
+      </button>
+    </div>
+
+    <!-- Aviso de expiração -->
+    <div class="expiration-warning" *ngIf="diasRestantes <= 3 && estaValida">
+      ⚠️ Corre! Esta promoção termina em {{ diasRestantes }}
+      {{ diasRestantes === 1 ? 'dia' : 'dias' }}
+    </div>
+  </div>
+</div>

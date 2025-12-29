@@ -1,87 +1,84 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { CartItem, Dish } from '../models/dish';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { ItemCarrinho, Prato } from '../models/dish.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  private cartItems = new BehaviorSubject<CartItem[]>([]);
-  private storageKey = 'restaurant_cart';
+  private itensCarrinho: ItemCarrinho[] = [];
+  private carrinhoSubject = new BehaviorSubject<ItemCarrinho[]>([]);
+
+  carrinho$ = this.carrinhoSubject.asObservable();
 
   constructor() {
-    // Carregar carrinho do localStorage ao iniciar
-    const savedCart = localStorage.getItem(this.storageKey);
-    if (savedCart) {
-      this.cartItems.next(JSON.parse(savedCart));
+    // Carregar carrinho do localStorage se existir
+    const carrinhoSalvo = localStorage.getItem('carrinhoRestaurante');
+    if (carrinhoSalvo) {
+      this.itensCarrinho = JSON.parse(carrinhoSalvo);
+      this.carrinhoSubject.next(this.itensCarrinho);
     }
-  }
-
-  // Observable para o carrinho
-  getCartItems() {
-    return this.cartItems.asObservable();
   }
 
   // Adicionar item ao carrinho
-  addToCart(dish: Dish, quantity: number = 1, notes?: string) {
-    const currentItems = this.cartItems.value;
-    const existingItemIndex = currentItems.findIndex(item => item.dish.id === dish.id);
+  adicionarAoCarrinho(prato: Prato, quantidade: number = 1): void {
+    const itemExistente = this.itensCarrinho.find(item => item.prato.id === prato.id);
 
-    if (existingItemIndex > -1) {
-      // Atualizar quantidade se item já existe
-      const updatedItems = [...currentItems];
-      updatedItems[existingItemIndex].quantity += quantity;
-      this.updateCart(updatedItems);
+    if (itemExistente) {
+      itemExistente.quantidade += quantidade;
     } else {
-      // Adicionar novo item
-      const newItem: CartItem = { dish, quantity, notes };
-      this.updateCart([...currentItems, newItem]);
+      this.itensCarrinho.push({ prato, quantidade });
     }
+
+    this.atualizarCarrinho();
   }
 
   // Remover item do carrinho
-  removeFromCart(dishId: number) {
-    const updatedItems = this.cartItems.value.filter(item => item.dish.id !== dishId);
-    this.updateCart(updatedItems);
+  removerDoCarrinho(pratoId: number): void {
+    this.itensCarrinho = this.itensCarrinho.filter(item => item.prato.id !== pratoId);
+    this.atualizarCarrinho();
   }
 
-  // Atualizar quantidade
-  updateQuantity(dishId: number, quantity: number) {
-    if (quantity <= 0) {
-      this.removeFromCart(dishId);
-      return;
-    }
+  // Atualizar quantidade de um item
+  atualizarQuantidade(pratoId: number, quantidade: number): void {
+    const item = this.itensCarrinho.find(item => item.prato.id === pratoId);
 
-    const updatedItems = this.cartItems.value.map(item =>
-      item.dish.id === dishId ? { ...item, quantity } : item
-    );
-    this.updateCart(updatedItems);
+    if (item) {
+      if (quantidade <= 0) {
+        this.removerDoCarrinho(pratoId);
+      } else {
+        item.quantidade = quantidade;
+        this.atualizarCarrinho();
+      }
+    }
   }
 
   // Limpar carrinho
-  clearCart() {
-    this.updateCart([]);
+  limparCarrinho(): void {
+    this.itensCarrinho = [];
+    this.atualizarCarrinho();
   }
 
   // Calcular total
-  getTotal(): number {
-    return this.cartItems.value.reduce(
-      (total, item) => total + (item.dish.price * item.quantity),
-      0
-    );
+  calcularTotal(): number {
+    return this.itensCarrinho.reduce((total, item) => {
+      return total + (item.prato.preco * item.quantidade);
+    }, 0);
   }
 
-  // Contar itens
-  getItemCount(): number {
-    return this.cartItems.value.reduce(
-      (count, item) => count + item.quantity,
-      0
-    );
+  // Contar itens totais
+  contarItens(): number {
+    return this.itensCarrinho.reduce((total, item) => total + item.quantidade, 0);
   }
 
-  // Método privado para atualizar carrinho e salvar no localStorage
-  private updateCart(items: CartItem[]) {
-    this.cartItems.next(items);
-    localStorage.setItem(this.storageKey, JSON.stringify(items));
+  // Método privado para atualizar estado e localStorage
+  private atualizarCarrinho(): void {
+    this.carrinhoSubject.next([...this.itensCarrinho]);
+    localStorage.setItem('carrinhoRestaurante', JSON.stringify(this.itensCarrinho));
+  }
+
+  // Buscar itens do carrinho
+  getItens(): ItemCarrinho[] {
+    return [...this.itensCarrinho];
   }
 }

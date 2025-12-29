@@ -3,31 +3,35 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent),
-    title: 'Restaurante Sabor - Home'
+    redirectTo: 'home',
+    pathMatch: 'full'
+  },
+  {
+    path: 'home',
+    loadComponent: () => import('./components/pages/home/home').then(m => m.HomeComponent)
   },
   {
     path: 'menu',
-    loadComponent: () => import('./pages/menu/menu.component').then(m => m.MenuComponent),
-    title: 'Menu Completo'
+    loadComponent: () => import('./components/pages/menu/menu').then(m => m.MenuComponent)
+  },
+  {
+    path: 'cart',
+    loadComponent: () => import('./components/pages/cart/cart').then(m => m.Cart)
   },
   {
     path: 'checkout',
-    loadComponent: () => import('./pages/checkout/checkout.component').then(m => m.CheckoutComponent),
-    title: 'Finalizar Pedido'
+    loadComponent: () => import('./components/pages/checkout/checkout').then(m => m.Checkout)
+  },
+  {
+    path: 'reservation',
+    loadComponent: () => import('./components/pages/reservation/reservation').then(m => m.Reservation)
   },
   {
     path: 'dish/:id',
-    loadComponent: () => import('./pages/dish-detail/dish-detail.component').then(m => m.DishDetailComponent),
-    title: 'Detalhes do Prato'
-  },
-  {
-    path: 'reservas',
-    loadComponent: () => import('./pages/reservation/reservation.component').then(m => m.ReservationComponent),
-    title: 'Reservar Mesa'
+    loadComponent: () => import('./components/pages/dish-detail/dish-detail').then(m => m.DishDetail)
   },
   {
     path: '**',
-    redirectTo: ''
+    redirectTo: 'home'
   }
 ];

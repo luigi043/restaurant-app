@@ -1,0 +1,62 @@
+<div class="filter-sidebar">
+  <h3>Filtros</h3>
+
+  <!-- Categoria -->
+  <div class="filter-group">
+    <label>Categoria</label>
+    <select [(ngModel)]="filtros.categoria" class="form-select">
+      <option value="">Todas</option>
+      <option *ngFor="let cat of categorias" [value]="cat.id">
+        {{ cat.nome }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Opções -->
+  <div class="filter-group">
+    <label class="checkbox-label">
+      <input type="checkbox" [(ngModel)]="filtros.vegetariano">
+      Apenas Vegetariano
+    </label>
+
+    <label class="checkbox-label">
+      <input type="checkbox" [(ngModel)]="filtros.picante">
+      Apenas Picante
+    </label>
+  </div>
+
+  <!-- Faixa de Preço -->
+  <div class="filter-group">
+    <label>Faixa de Preço</label>
+    <div class="price-range">
+      <span>R$ {{ filtros.precoMin }}</span>
+      <span>a</span>
+      <span>R$ {{ filtros.precoMax }}</span>
+    </div>
+
+    <input
+      type="range"
+      [(ngModel)]="filtros.precoMin"
+      [min]="0"
+      [max]="200"
+      class="price-slider">
+
+    <input
+      type="range"
+      [(ngModel)]="filtros.precoMax"
+      [min]="0"
+      [max]="200"
+      class="price-slider">
+  </div>
+
+  <!-- Botões -->
+  <div class="filter-actions">
+    <button (click)="aplicarFiltros()" class="btn btn-primary">
+      Aplicar Filtros
+    </button>
+
+    <button (click)="limparFiltros()" class="btn btn-secondary">
+      Limpar Filtros
+    </button>
+  </div>
+</div>
