@@ -1,1 +1,34 @@
-<p>loading-skeleton works!</p>
+<ng-container [ngSwitch]="type">
+  <!-- Skeleton Card -->
+  <div *ngSwitchCase="'card'" class="skeleton-card" [style.border-radius]="borderRadius">
+    <div class="skeleton-image" [style.border-radius]="borderRadius"></div>
+    <div class="skeleton-content">
+      <div class="skeleton-line title"></div>
+      <div class="skeleton-line subtitle"></div>
+      <div class="skeleton-line short"></div>
+      <div class="skeleton-actions">
+        <div class="skeleton-button"></div>
+        <div class="skeleton-button"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skeleton List -->
+  <div *ngSwitchCase="'list'" class="skeleton-list">
+    <div *ngFor="let item of items" class="skeleton-list-item">
+      <div class="skeleton-avatar"></div>
+      <div class="skeleton-list-content">
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line short"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skeleton Text -->
+  <div *ngSwitchCase="'text'" class="skeleton-text">
+    <div *ngFor="let item of items" class="skeleton-line" [style.width]="width" [style.height]="height"></div>
+  </div>
+
+  <!-- Skeleton Image -->
+  <div *ngSwitchCase="'image'" class="skeleton-image" [style.width]="width" [style.height]="height" [style.border-radius]="borderRadius"></div>
+</ng-container>

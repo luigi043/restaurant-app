@@ -6,6 +6,7 @@ import { CartService } from '../../../services/cart';
 import { Prato, Categoria } from '../../../models/dish';
 import { MenuCardComponent } from '../../shared/menu-card/menu-card';
 import { FilterSidebarComponent } from '../../shared/filter-sidebar/filter-sidebar';
+import { EmptyStateComponent } from "../../shared/empty-state/empty-state";
 
 @Component({
   selector: 'app-menu',
@@ -14,8 +15,9 @@ import { FilterSidebarComponent } from '../../shared/filter-sidebar/filter-sideb
     CommonModule,
     FormsModule,
     MenuCardComponent,
-    FilterSidebarComponent
-  ],
+    FilterSidebarComponent,
+    EmptyStateComponent
+],
   templateUrl: './menu.html',
   styleUrls: ['./menu.scss']
 })

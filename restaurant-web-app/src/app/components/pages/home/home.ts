@@ -7,6 +7,7 @@ import { Prato, Promocao } from '../../../models/dish';
 import { MenuCardComponent } from '../../shared/menu-card/menu-card';
 import { PromoBannerComponent } from '../../shared/promo-banner/promo-banner';
 import { HeroSectionComponent } from '../../shared/hero-section/hero-section';
+import { EmptyStateComponent } from "../../shared/empty-state/empty-state";
 
 @Component({
   selector: 'app-home',
@@ -16,8 +17,9 @@ import { HeroSectionComponent } from '../../shared/hero-section/hero-section';
     RouterModule,
     HeroSectionComponent,
     MenuCardComponent,
-    PromoBannerComponent
-  ],
+    PromoBannerComponent,
+    EmptyStateComponent
+],
   templateUrl: './home.html',
   styleUrls: ['./home.scss']
 })

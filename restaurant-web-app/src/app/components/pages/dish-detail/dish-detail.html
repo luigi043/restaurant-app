@@ -17,21 +17,26 @@
   </header>
 
   <div class="container dish-detail-container">
-    <!-- Loading State -->
-    <div class="loading-state" *ngIf="carregando">
-      <div class="loading-spinner"></div>
-      <p>Carregando detalhes do prato...</p>
+  <!-- Substituir loading state: -->
+<div class="loading-state" *ngIf="carregando">
+  <div class="loading-content">
+    <app-loading-skeleton type="image" [height]="'400px'"></app-loading-skeleton>
+    <div class="loading-info">
+      <app-loading-skeleton type="text" [count]="4"></app-loading-skeleton>
     </div>
+  </div>
+</div>
 
-    <!-- Error State -->
-    <div class="error-state" *ngIf="erro && !carregando">
-      <div class="error-icon">❌</div>
-      <h2>Prato não encontrado</h2>
-      <p>{{ mensagemErro }}</p>
-      <button class="btn btn-primary" (click)="voltarParaCardapio()">
-        Voltar para Cardápio
-      </button>
-    </div>
+<!-- Substituir error state: -->
+<div class="error-state" *ngIf="erro && !carregando">
+  <app-empty-state
+    icon="❌"
+    title="Prato não encontrado"
+    [message]="mensagemErro"
+    [buttonLink]="'/menu'"
+    buttonText="Voltar para Cardápio">
+  </app-empty-state>
+</div>
 
     <!-- Conteúdo do prato -->
     <div *ngIf="prato && !carregando && !erro" class="dish-content">

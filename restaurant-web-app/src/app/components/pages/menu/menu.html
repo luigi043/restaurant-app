@@ -77,10 +77,16 @@
       </div>
 
       <!-- Loading State -->
-      <div class="loading-state" *ngIf="carregando">
-        <div class="loading-spinner"></div>
-        <p>Carregando cardápio...</p>
-      </div>
+      <div class="empty-state" *ngIf="pratosEncontrados === 0">
+  <app-empty-state
+    type="search"
+    title="Nenhum prato encontrado"
+    message="Não encontramos pratos com os filtros selecionados."
+    [showButton]="true"
+    (action)="limparFiltros()"
+    buttonText="Limpar filtros">
+  </app-empty-state>
+</div>
 
       <!-- Grid de Pratos -->
       <div *ngIf="!carregando">

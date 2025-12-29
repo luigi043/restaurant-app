@@ -5,11 +5,13 @@ import { FormsModule } from '@angular/forms';
 import { RestaurantService } from '../../../services/restaurant';
 import { CartService } from '../../../services/cart';
 import { Prato } from '../../../models/dish';
+import { EmptyStateComponent } from "../../shared/empty-state/empty-state";
+import { LoadingSkeletonComponent } from "../../shared/loading-skeleton/loading-skeleton";
 
 @Component({
   selector: 'app-dish-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, EmptyStateComponent, LoadingSkeletonComponent],
   templateUrl: './dish-detail.html',
   styleUrls: ['./dish-detail.scss']
 })

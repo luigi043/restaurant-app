@@ -1,0 +1,119 @@
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 2rem;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 0 auto;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+  }
+
+  // Tipos específicos
+  &.type-cart {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+
+    .empty-icon {
+      background-color: #ff6b35;
+      color: white;
+    }
+  }
+
+  &.type-search {
+    background: linear-gradient(135deg, #f0f7ff 0%, #e1ecff 100%);
+
+    .empty-icon {
+      background-color: #0066cc;
+      color: white;
+    }
+  }
+
+  &.type-favorites {
+    background: linear-gradient(135deg, #fff0f0 0%, #ffe6e6 100%);
+
+    .empty-icon {
+      background-color: #ff3b30;
+      color: white;
+    }
+  }
+
+  .empty-icon {
+    font-size: 4rem;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    background-color: #f8f9fa;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover .empty-icon {
+    transform: scale(1.1);
+  }
+
+  .empty-content {
+    .empty-title {
+      font-size: 1.75rem;
+      color: #1a1a1a;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .empty-message {
+      font-size: 1.1rem;
+      color: #666;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+      max-width: 400px;
+    }
+
+    .empty-actions {
+      .btn {
+        padding: 0.75rem 2.5rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: all 0.3s;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+      }
+    }
+  }
+}
+
+// Responsividade
+@media (max-width: 768px) {
+  .empty-state {
+    padding: 2rem 1rem;
+
+    .empty-icon {
+      font-size: 3rem;
+      width: 80px;
+      height: 80px;
+    }
+
+    .empty-content {
+      .empty-title {
+        font-size: 1.5rem;
+      }
+
+      .empty-message {
+        font-size: 1rem;
+      }
+    }
+  }
+}

@@ -5,11 +5,12 @@ import { Subscription } from 'rxjs';
 import { CartService } from '../../../services/cart';
 import { ItemCarrinho } from '../../../models/dish';
 import { CartItemComponent } from '../../shared/cart-item/cart-item';
+import { EmptyStateComponent } from "../../shared/empty-state/empty-state";
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, RouterModule, CartItemComponent],
+  imports: [CommonModule, RouterModule, CartItemComponent, EmptyStateComponent],
   templateUrl: './cart.html',
   styleUrls: ['./cart.scss']
 })

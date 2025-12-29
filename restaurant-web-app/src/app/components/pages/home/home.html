@@ -10,11 +10,15 @@
 </div>
 
     <!-- Loading State -->
-    <div class="loading-state" *ngIf="carregando">
-      <div class="loading-spinner"></div>
-      <p>Carregando pratos...</p>
-    </div>
-
+    <div class="empty-state" *ngIf="!carregando && pratosDestaque.length === 0">
+  <app-empty-state
+    type="search"
+    title="Nenhum prato em destaque"
+    message="No momento não temos pratos em destaque. Visite nosso cardápio completo!"
+    [buttonLink]="'/menu'"
+    buttonText="Ver Cardápio">
+  </app-empty-state>
+</div>
     <!-- Grid de Pratos -->
     <div class="dishes-grid" *ngIf="!carregando && pratosDestaque.length > 0">
       <app-menu-card

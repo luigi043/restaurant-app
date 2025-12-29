@@ -19,7 +19,14 @@
         </button>
       </div>
     </div>
-
+<!-- Substituir empty cart: -->
+<div class="empty-cart" *ngIf="itensCarrinho.length === 0">
+  <app-empty-state
+    type="cart"
+    [buttonLink]="'/menu'"
+    buttonText="Explorar Cardápio">
+  </app-empty-state>
+</div>
     <!-- Carrinho com itens -->
     <div *ngIf="itensCarrinho.length > 0" class="cart-with-items">
       <div class="cart-layout">
