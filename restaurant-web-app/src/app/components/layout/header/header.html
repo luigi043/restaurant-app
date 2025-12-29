@@ -1,1 +1,69 @@
-<p>header works!</p>
+<header class="header">
+  <div class="container">
+    <!-- Logo do Restaurante -->
+    <a routerLink="/home" class="logo" (click)="closeMenu()">
+      <span class="logo-icon">pratos</span>
+      <span class="logo-text">Restaurante Sabor & Arte</span>
+    </a>
+
+    <!-- Botão para menu mobile -->
+    <button
+      class="menu-toggle"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="isMenuOpen"
+      aria-label="Abrir menu de navegação">
+      <span class="hamburger"></span>
+    </button>
+
+    <!-- Navegação Principal -->
+    <nav class="nav" [class.active]="isMenuOpen">
+      <ul class="nav-list">
+        <!-- Link para Home -->
+        <li class="nav-item">
+          <a
+            routerLink="/home"
+            routerLinkActive="active"
+            (click)="closeMenu()"
+            aria-current="page">
+            Início
+          </a>
+        </li>
+
+        <!-- Link para Cardápio -->
+        <li class="nav-item">
+          <a
+            routerLink="/menu"
+            routerLinkActive="active"
+            (click)="closeMenu()">
+            Cardápio
+          </a>
+        </li>
+
+        <!-- Link para Reservas -->
+        <li class="nav-item">
+          <a
+            routerLink="/reservation"
+            routerLinkActive="active"
+            (click)="closeMenu()">
+            Reservas
+          </a>
+        </li>
+
+        <!-- Link para Carrinho com contador -->
+        <li class="nav-item">
+          <a
+            routerLink="/cart"
+            routerLinkActive="active"
+            (click)="closeMenu()"
+            class="cart-link">
+            <span class="cart-icon" aria-hidden="true">🛒</span>
+            <span class="cart-count" *ngIf="totalItens$ | async as total">
+              {{ total }}
+            </span>
+            <span class="sr-only">Carrinho ({{ totalItens$ | async }} itens)</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
