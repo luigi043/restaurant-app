@@ -1,1 +1,67 @@
-<p>home works!</p>
+<!-- Seção Hero -->
+<app-hero-section></app-hero-section>
+
+<div class="container">
+  <!-- Seção de Destaques -->
+  <section class="highlights-section">
+    <div class="section-header">
+      <h2 class="section-title">🎯 Destaques da Semana</h2>
+      <p class="section-subtitle">Os pratos mais amados pelos nossos clientes</p>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="carregando">
+      <div class="loading-spinner"></div>
+      <p>Carregando pratos...</p>
+    </div>
+
+    <!-- Grid de Pratos -->
+    <div class="dishes-grid" *ngIf="!carregando && pratosDestaque.length > 0">
+      <app-menu-card
+        *ngFor="let prato of pratosDestaque"
+        [prato]="prato"
+        [showButton]="true"
+        (adicionarCarrinho)="adicionarAoCarrinho($event)">
+      </app-menu-card>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!carregando && pratosDestaque.length === 0">
+      <div class="empty-icon">🍽️</div>
+      <h3>Nenhum prato em destaque</h3>
+      <p>No momento não temos pratos em destaque. Visite nosso cardápio completo!</p>
+      <a routerLink="/menu" class="btn btn-primary">Ver Cardápio</a>
+    </div>
+  </section>
+
+  <!-- Seção de Promoções -->
+  <section class="promo-section" *ngIf="promocoes.length > 0">
+    <div class="section-header">
+      <h2 class="section-title">💰 Promoções Especiais</h2>
+      <p class="section-subtitle">Aproveite nossas ofertas exclusivas</p>
+    </div>
+
+    <div class="promo-grid">
+      <app-promo-banner
+        *ngFor="let promocao of promocoes"
+        [promocao]="promocao">
+      </app-promo-banner>
+    </div>
+  </section>
+
+  <!-- Seção de CTA -->
+  <section class="cta-section">
+    <div class="cta-content">
+      <h2>Experimente nossa experiência gastronômica</h2>
+      <p>Faça sua reserva agora e garanta uma mesa no melhor restaurante da cidade</p>
+      <div class="cta-actions">
+        <a routerLink="/reservation" class="btn btn-primary btn-large">
+          Reservar Mesa
+        </a>
+        <a routerLink="/menu" class="btn btn-secondary btn-large">
+          Ver Cardápio
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
