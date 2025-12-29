@@ -1,13 +1,12 @@
 
 # 🍝 Trattoria Bella Italia - Restaurant Web App
-![alt text](image.png)
 ![Angular](https://img.shields.io/badge/Angular-17+-DD0031?style=for-the-badge&logo=angular&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![SCSS](https://img.shields.io/badge/SCSS-CC6699?style=for-the-badge&logo=sass&logoColor=white)
 
 Uma aplicação web moderna para um restaurante italiano, construída com Angular 17+. Oferece uma experiência completa de usuário com cardápio interativo, sistema de carrinho, reservas de mesa e checkout.
 
-![Screenshot da Aplicação](https://via.placeholder.com/800x400/1a1a1a/ffffff?text=Trattoria+Bella+Italia)
+![Screenshot da Aplicação](image.png)
 
 ## ✨ Funcionalidades
 
