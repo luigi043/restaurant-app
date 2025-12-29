@@ -1,1 +1,120 @@
 <p>filter-sidebar works!</p>
+<aside class="filter-sidebar">
+  <div class="filter-header">
+    <h2>🔍 Filtros</h2>
+    <button class="btn-clear" (click)="limparFiltros()" aria-label="Limpar todos os filtros">
+      Limpar tudo
+    </button>
+  </div>
+
+  <!-- Filtro por Categoria -->
+  <div class="filter-group">
+    <h3 class="filter-title">
+      <span class="filter-icon">🍽️</span>
+      Categoria
+    </h3>
+    <div class="filter-options">
+      <label class="filter-option">
+        <input
+          type="radio"
+          name="categoria"
+          value=""
+          [(ngModel)]="filtros.categoria"
+          (change)="aplicarFiltros()">
+        <span class="filter-label">Todas as Categorias</span>
+      </label>
+
+      <label *ngFor="let categoria of categorias" class="filter-option">
+        <input
+          type="radio"
+          name="categoria"
+          [value]="categoria.id"
+          [(ngModel)]="filtros.categoria"
+          (change)="aplicarFiltros()">
+        <span class="filter-label">
+          {{ categoria.icone }} {{ categoria.nome }}
+        </span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Filtros de Opções -->
+  <div class="filter-group">
+    <h3 class="filter-title">
+      <span class="filter-icon">⚙️</span>
+      Opções
+    </h3>
+    <div class="filter-options">
+      <label class="filter-option checkbox">
+        <input
+          type="checkbox"
+          [(ngModel)]="filtros.vegetariano"
+          (change)="aplicarFiltros()">
+        <span class="filter-label">
+          <span class="option-icon">🌱</span>
+          Apenas Vegetarianos
+        </span>
+      </label>
+
+      <label class="filter-option checkbox">
+        <input
+          type="checkbox"
+          [(ngModel)]="filtros.picante"
+          (change)="aplicarFiltros()">
+        <span class="filter-label">
+          <span class="option-icon">🌶️</span>
+          Apenas Picantes
+        </span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Filtro por Faixa de Preço -->
+  <div class="filter-group">
+    <h3 class="filter-title">
+      <span class="filter-icon">💰</span>
+      Faixa de Preço
+    </h3>
+
+    <div class="price-display">
+      <span class="price-min">{{ formatarPreco(filtros.precoMin) }}</span>
+      <span class="price-separator">-</span>
+      <span class="price-max">{{ formatarPreco(filtros.precoMax) }}</span>
+    </div>
+
+    <div class="price-sliders">
+      <!-- Slider para preço mínimo -->
+      <div class="slider-container">
+        <label for="precoMin" class="slider-label">Mínimo</label>
+        <input
+          id="precoMin"
+          type="range"
+          [(ngModel)]="filtros.precoMin"
+          [min]="0"
+          [max]="200"
+          (input)="aplicarFiltros()"
+          class="price-slider">
+      </div>
+
+      <!-- Slider para preço máximo -->
+      <div class="slider-container">
+        <label for="precoMax" class="slider-label">Máximo</label>
+        <input
+          id="precoMax"
+          type="range"
+          [(ngModel)]="filtros.precoMax"
+          [min]="0"
+          [max]="200"
+          (input)="aplicarFiltros()"
+          class="price-slider">
+      </div>
+    </div>
+  </div>
+
+  <!-- Botão de aplicar filtros (mobile) -->
+  <div class="filter-actions">
+    <button class="btn btn-primary btn-apply" (click)="aplicarFiltros()">
+      Aplicar Filtros
+    </button>
+  </div>
+</aside>

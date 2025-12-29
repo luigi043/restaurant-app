@@ -1,1 +1,127 @@
-<p>menu works!</p>
+<div class="menu-page">
+  <!-- Cabeçalho da página -->
+  <header class="page-header">
+    <div class="container">
+      <h1 class="page-title">🍽️ Nosso Cardápio</h1>
+      <p class="page-subtitle">Explore nossa seleção de pratos especiais</p>
+
+      <!-- Botão filtros mobile -->
+      <button
+        class="btn-filter-mobile"
+        (click)="toggleFiltrosMobile()"
+        [class.active]="mostrarFiltrosMobile">
+        <span class="filter-icon">🔍</span>
+        Filtros
+        <span class="filter-count" *ngIf="filtrosAtivos.categoria || filtrosAtivos.vegetariano || filtrosAtivos.picante || filtrosAtivos.precoMin > 0 || filtrosAtivos.precoMax < 200">
+          (Ativos)
+        </span>
+      </button>
+    </div>
+  </header>
+
+  <div class="container menu-container">
+    <!-- Filtros Sidebar (Desktop) -->
+    <aside class="sidebar-desktop">
+      <app-filter-sidebar
+        [categorias]="categorias"
+        (filtrosAplicados)="aplicarFiltros($event)"
+        (filtrosLimpos)="limparFiltros()">
+      </app-filter-sidebar>
+    </aside>
+
+    <!-- Filtros Mobile (Overlay) -->
+    <div class="filters-mobile-overlay" *ngIf="mostrarFiltrosMobile" (click)="toggleFiltrosMobile()"></div>
+    <aside class="sidebar-mobile" [class.active]="mostrarFiltrosMobile">
+      <div class="mobile-header">
+        <h2>Filtros</h2>
+        <button class="btn-close" (click)="toggleFiltrosMobile()">✕</button>
+      </div>
+      <app-filter-sidebar
+        [categorias]="categorias"
+        (filtrosAplicados)="aplicarFiltros($event); mostrarFiltrosMobile = false"
+        (filtrosLimpos)="limparFiltros(); mostrarFiltrosMobile = false">
+      </app-filter-sidebar>
+    </aside>
+
+    <!-- Conteúdo Principal -->
+    <main class="menu-content">
+      <!-- Categorias rápidas -->
+      <div class="categories-quick">
+        <button
+          class="category-btn"
+          [class.active]="categoriaSelecionada === 'todas'"
+          (click)="selecionarCategoria('todas')">
+          🍽️ Todos
+        </button>
+
+        <button
+          *ngFor="let categoria of categorias"
+          class="category-btn"
+          [class.active]="categoriaSelecionada === categoria.id"
+          (click)="selecionarCategoria(categoria.id)">
+          {{ categoria.icone }} {{ categoria.nome }}
+        </button>
+      </div>
+
+      <!-- Status dos filtros -->
+      <div class="filters-status" *ngIf="filtrosAtivos.categoria || filtrosAtivos.vegetariano || filtrosAtivos.picante || filtrosAtivos.precoMin > 0 || filtrosAtivos.precoMax < 200">
+        <div class="status-content">
+          <span class="status-text">
+            Filtros aplicados:
+            <span class="filters-count">{{ pratosEncontrados }}</span> de {{ totalPratos }} pratos
+          </span>
+          <button class="btn-clear-filters" (click)="limparFiltros()">
+            Limpar filtros
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div class="loading-state" *ngIf="carregando">
+        <div class="loading-spinner"></div>
+        <p>Carregando cardápio...</p>
+      </div>
+
+      <!-- Grid de Pratos -->
+      <div *ngIf="!carregando">
+        <!-- Resultados encontrados -->
+        <div class="results-header">
+          <h2 class="results-title">
+            {{ pratosEncontrados }}
+            {{ pratosEncontrados === 1 ? 'prato encontrado' : 'pratos encontrados' }}
+          </h2>
+
+          <!-- Ordenação (opcional, para futura implementação) -->
+          <div class="sort-options">
+            <select class="sort-select" disabled>
+              <option>Ordenar por: Recomendado</option>
+              <option>Preço: menor para maior</option>
+              <option>Preço: maior para menor</option>
+              <option>Mais populares</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Grid de pratos -->
+        <div class="dishes-grid" *ngIf="pratosEncontrados > 0">
+          <app-menu-card
+            *ngFor="let prato of pratosFiltrados"
+            [prato]="prato"
+            [showButton]="true"
+            (adicionarCarrinho)="adicionarAoCarrinho($event)">
+          </app-menu-card>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="pratosEncontrados === 0">
+          <div class="empty-icon">🔍</div>
+          <h3>Nenhum prato encontrado</h3>
+          <p>Não encontramos pratos com os filtros selecionados.</p>
+          <button class="btn btn-primary" (click)="limparFiltros()">
+            Limpar filtros
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
