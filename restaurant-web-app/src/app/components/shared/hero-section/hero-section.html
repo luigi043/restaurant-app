@@ -1,49 +1,164 @@
-<section class="hero-section">
-  <div class="hero-overlay">
-    <div class="container">
-      <div class="hero-content">
-        <!-- Título principal -->
-        <h1 class="hero-title">
-          <span class="highlight">Trattoria Bella Italia</span><br>
-          Autenticidade Italiana em Cada Prato
-        </h1>
+<!-- hero-section.component.html -->
+<section class="hero-section" @fadeInUp>
+  <div class="hero-background">
+    <!-- Overlay gradiente -->
+    <div class="hero-overlay"></div>
 
-        <!-- Descrição -->
-        <p class="hero-description">
-          Descubra os verdadeiros sabores da Itália em nosso restaurante.
-          Cada prato é preparado com ingredientes importados e receitas
-          tradicionais passadas de geração em geração.
-        </p>
+    <!-- Elementos decorativos -->
+    <div class="hero-decoration">
+      <div class="pasta-decoration">🍝</div>
+      <div class="wine-decoration">🍷</div>
+      <div class="olive-decoration">🫒</div>
+    </div>
+  </div>
 
-        <!-- Características -->
-        <div class="features">
-          <div *ngFor="let item of caracteristicas" class="feature-item">
-            <span class="feature-icon">{{ item.icone }}</span>
-            <span class="feature-text">{{ item.texto }}</span>
-          </div>
+  <div class="container">
+    <div class="hero-content" @staggerItems>
+      <!-- Saudação dinâmica -->
+      <div class="hero-greeting">
+        <span class="greeting-icon">👋</span>
+        <span class="greeting-text">{{ saudacao }}</span>
+      </div>
+
+      <!-- Título principal com efeito máquina de escrever -->
+      <h1 class="hero-title">
+        <span class="title-line">Trattoria</span>
+        <span class="title-line highlight">Bella Italia</span>
+        <span class="title-line dynamic-title">
+          <span class="typing-cursor">|</span>
+          {{ titleDisplay }}
+        </span>
+      </h1>
+
+      <!-- Descrição -->
+      <p class="hero-description">
+        Desde 1990, trazemos o verdadeiro sabor da Itália para sua mesa.
+        Cada prato é uma celebração da tradição italiana, preparada com
+        paixão e ingredientes selecionados.
+      </p>
+
+      <!-- Características interativas -->
+      <div class="features-section">
+        <div class="features-header">
+          <h3>✨ O Que Nos Torna Especiais</h3>
+          <button
+            class="btn-toggle-features"
+            (click)="toggleFeatures()"
+            [attr.aria-expanded]="showAllFeatures">
+            {{ showAllFeatures ? 'Ver menos' : 'Ver mais' }}
+            <span class="toggle-icon">{{ showAllFeatures ? '▲' : '▼' }}</span>
+          </button>
         </div>
 
-        <!-- Horário -->
-        <div class="opening-hours">
-          <div class="hours-info">
-            <span class="hours-icon">⏰</span>
-            <div class="hours-details">
-              <strong>{{ horarioFuncionamento.dias }}</strong>
-              <p>{{ horarioFuncionamento.horario }}</p>
-              <p>Telefone: {{ horarioFuncionamento.telefone }}</p>
+        <!-- Carrossel/Grid de características -->
+        <div class="features-container">
+          <!-- Destaque principal -->
+          <div
+            class="feature-highlight"
+            [@pulseIcon]
+            (mouseenter)="onFeatureHover(currentFeatureIndex)"
+            (mouseleave)="onFeatureLeave()">
+            <div class="highlight-icon">{{ currentFeature.icone }}</div>
+            <div class="highlight-content">
+              <h4>{{ currentFeature.texto }}</h4>
+              <p>{{ currentFeature.descricao }}</p>
+            </div>
+          </div>
+
+          <!-- Grid de características -->
+          <div class="features-grid">
+            <div
+              *ngFor="let item of visibleFeatures; let i = index"
+              class="feature-item"
+              [class.active]="i === currentFeatureIndex"
+              (mouseenter)="onFeatureHover(i)"
+              (mouseleave)="onFeatureLeave()"
+              (click)="currentFeatureIndex = i">
+              <span class="feature-icon">{{ item.icone }}</span>
+              <span class="feature-text">{{ item.texto }}</span>
             </div>
           </div>
         </div>
 
-        <!-- Botões de ação -->
-        <div class="hero-actions">
-          <a routerLink="/menu" class="btn btn-primary btn-large">
-            Ver Cardápio Completo
-          </a>
-          <a routerLink="/reservation" class="btn btn-secondary btn-large">
-            Reservar Mesa
-          </a>
+        <!-- Indicadores do carrossel -->
+        <div class="carousel-indicators">
+          <button
+            *ngFor="let item of caracteristicas; let i = index"
+            class="indicator"
+            [class.active]="i === currentFeatureIndex"
+            (click)="currentFeatureIndex = i"
+            [attr.aria-label]="'Característica ' + (i + 1)">
+          </button>
         </div>
+      </div>
+
+      <!-- Informações práticas -->
+      <div class="practical-info">
+        <div class="info-card status-card">
+          <div class="status-header">
+            <span class="status-icon" [style.color]="statusAberto.cor">
+              {{ statusAberto.icone }}
+            </span>
+            <div class="status-content">
+              <strong>{{ statusAberto.status }}</strong>
+              <span class="status-time">{{ tempoAteAbertura }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card hours-card">
+          <div class="hours-content">
+            <span class="hours-icon">🕒</span>
+            <div class="hours-details">
+              <strong>{{ horarioFuncionamento.dias }}</strong>
+              <p>{{ horarioFuncionamento.horario }}</p>
+              <p class="hours-note">Domingo: 12:00 - 22:00</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card contact-card">
+          <div class="contact-content">
+            <span class="contact-icon">📍</span>
+            <div class="contact-details">
+              <strong>{{ horarioFuncionamento.endereco }}</strong>
+              <p>Telefone: {{ formatarTelefone(horarioFuncionamento.telefone) }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Call to Action -->
+      <div class="hero-actions">
+        <a
+          routerLink="/menu"
+          class="btn btn-primary btn-hero"
+          aria-label="Explorar nosso cardápio completo">
+          <span class="btn-icon">🍽️</span>
+          <span class="btn-text">Explorar Cardápio</span>
+        </a>
+
+        <a
+          routerLink="/reservation"
+          class="btn btn-secondary btn-hero"
+          aria-label="Reservar uma mesa no restaurante">
+          <span class="btn-icon">📅</span>
+          <span class="btn-text">Reservar Mesa</span>
+        </a>
+
+        <button
+          class="btn btn-outline btn-hero"
+          (click)="scrollToSection('highlights')"
+          aria-label="Ver pratos em destaque">
+          <span class="btn-icon">⭐</span>
+          <span class="btn-text">Ver Destaques</span>
+        </button>
+      </div>
+
+      <!-- Indicador de scroll -->
+      <div class="scroll-indicator" (click)="scrollToSection('highlights')">
+        <span class="scroll-text">Descubra mais</span>
+        <div class="scroll-arrow">↓</div>
       </div>
     </div>
   </div>
