@@ -1,11 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, delay } from 'rxjs';
-import { Prato, Categoria, Promocao } from '../models/dish';
+import { Observable, of, delay, BehaviorSubject } from 'rxjs';
+import { Prato, Categoria, Promocao, Reserva } from '../models/dish';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RestaurantService {
+
+  private reservas: Reserva[] = [];
+  private reservasSubject = new BehaviorSubject<Reserva[]>([]);
+
+  reservas$ = this.reservasSubject.asObservable();
+
   // Dados dos pratos italianos
   private pratos: Prato[] = [
     // ENTRADAS
@@ -291,7 +297,98 @@ export class RestaurantService {
     }
   ];
 
-  constructor() {}
+   constructor() {
+    // Carregar reservas do localStorage se existirem
+    const reservasSalvas = localStorage.getItem('reservasTrattoria');
+    if (reservasSalvas) {
+      this.reservas = JSON.parse(reservasSalvas);
+      this.reservasSubject.next(this.reservas);
+    }
+  }
+
+  // Criar nova reserva
+  criarReserva(reserva: Reserva): Observable<Reserva> {
+    // Gerar ID único
+    const novaReserva = {
+      ...reserva,
+      id: this.gerarIdUnico()
+    };
+
+    this.reservas.push(novaReserva);
+    this.atualizarStorage();
+
+    return of(novaReserva).pipe(delay(800)); // Simular delay de API
+  }
+
+  // Buscar reservas por email
+  getReservasPorEmail(email: string): Observable<Reserva[]> {
+    const reservasFiltradas = this.reservas.filter(r => r.email === email);
+    return of(reservasFiltradas).pipe(delay(500));
+  }
+
+  // Cancelar reserva
+  cancelarReserva(id: string): Observable<boolean> {
+    const index = this.reservas.findIndex(r => r.id === id);
+
+    if (index !== -1) {
+      this.reservas.splice(index, 1);
+      this.atualizarStorage();
+      return of(true).pipe(delay(500));
+    }
+
+    return of(false).pipe(delay(500));
+  }
+
+  // Verificar disponibilidade de horário
+  verificarDisponibilidade(data: Date, hora: string, numeroPessoas: number): Observable<boolean> {
+    // Simular verificação de disponibilidade
+    // Em uma aplicação real, isso verifica no servidor
+
+    // Converter data e hora para comparação
+    const dataReserva = new Date(data);
+    const [horaReserva, minutoReserva] = hora.split(':').map(Number);
+    dataReserva.setHours(horaReserva, minutoReserva);
+
+    // Verificar se há reservas conflitantes (dentro de 2 horas)
+    const reservasConflitantes = this.reservas.filter(reserva => {
+      const dataExistente = new Date(reserva.data);
+      const [horaExistente, minutoExistente] = reserva.hora.split(':').map(Number);
+      dataExistente.setHours(horaExistente, minutoExistente);
+
+      const diferencaHoras = Math.abs(dataReserva.getTime() - dataExistente.getTime()) / (1000 * 60 * 60);
+
+      return diferencaHoras < 2 && reserva.numeroPessoas + numeroPessoas > 20; // Capacidade máxima de 20 pessoas simultâneas
+    });
+
+    const disponivel = reservasConflitantes.length === 0;
+    return of(disponivel).pipe(delay(600));
+  }
+
+  // Gerar ID único
+  private gerarIdUnico(): string {
+    return 'RES' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5).toUpperCase();
+  }
+
+  // Atualizar localStorage
+  private atualizarStorage(): void {
+    localStorage.setItem('reservasTrattoria', JSON.stringify(this.reservas));
+    this.reservasSubject.next([...this.reservas]);
+  }
+
+  // Horários disponíveis para reserva
+  getHorariosDisponiveis(): string[] {
+    return [
+      '18:00', '18:30', '19:00', '19:30',
+      '20:00', '20:30', '21:00', '21:30',
+      '22:00', '22:30'
+    ];
+  }
+
+  // Dias da semana em italiano
+  getDiasDaSemana(): string[] {
+    return ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+  }
+
 
   getPratos(): Observable<Prato[]> {
     return of(this.pratos).pipe(delay(500));

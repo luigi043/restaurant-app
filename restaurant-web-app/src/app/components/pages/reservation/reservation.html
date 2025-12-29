@@ -1,1 +1,382 @@
-<p>reservation works!</p>
+<div class="reservation-page">
+  <!-- Cabeçalho da página -->
+  <header class="page-header">
+    <div class="container">
+      <h1 class="page-title">🍽️ Reserva de Mesa</h1>
+      <p class="page-subtitle">Garanta sua experiência gastronômica italiana</p>
+    </div>
+  </header>
+
+  <div class="container reservation-container">
+    <!-- Formulário de reserva -->
+    <div *ngIf="!reservaRealizada" class="reservation-form-section">
+      <div class="reservation-layout">
+        <!-- Informações sobre reservas -->
+        <aside class="reservation-info">
+          <div class="info-card">
+            <h2 class="info-title">🇮🇹 Trattoria Bella Italia</h2>
+            <p class="info-subtitle">Reserve sua mesa com antecedência</p>
+
+            <!-- Horários -->
+            <div class="info-section">
+              <h3>⏰ Horário de Funcionamento</h3>
+              <div class="info-content">
+                <div class="info-item">
+                  <span class="info-label">Terça a Quinta</span>
+                  <span class="info-value">18:00 - 23:00</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Sexta e Sábado</span>
+                  <span class="info-value">18:00 - 00:00</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Domingo</span>
+                  <span class="info-value">12:00 - 22:00</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Segunda</span>
+                  <span class="info-value">Fechado</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Capacidade -->
+            <div class="info-section">
+              <h3>👥 Capacidade</h3>
+              <div class="info-content">
+                <div class="info-item">
+                  <span class="info-label">Mesa para 2-4 pessoas</span>
+                  <span class="info-value">Disponível</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Mesa para 5-8 pessoas</span>
+                  <span class="info-value">Sob consulta</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Mesa para 9-12 pessoas</span>
+                  <span class="info-value">Sob consulta</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Informações importantes -->
+            <div class="info-section">
+              <h3>📋 Informações Importantes</h3>
+              <div class="info-list">
+                <div class="info-point">
+                  <span class="point-icon">⏱️</span>
+                  <span class="point-text">Sua mesa será reservada por 2 horas</span>
+                </div>
+                <div class="info-point">
+                  <span class="point-icon">📞</span>
+                  <span class="point-text">Ligue-nos para grupos maiores</span>
+                </div>
+                <div class="info-point">
+                  <span class="point-icon">🚭</span>
+                  <span class="point-text">Ambiente não-fumante</span>
+                </div>
+                <div class="info-point">
+                  <span class="point-icon">🐕</span>
+                  <span class="point-text">Pet-friendly na área externa</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contato -->
+            <div class="contact-info">
+              <h3>📞 Precisa de ajuda?</h3>
+              <p>Ligue para nós: <strong>(11) 9999-9999</strong></p>
+              <p>Ou envie um e-mail: <strong>reservas@trattoriaitalia.com</strong></p>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Formulário principal -->
+        <main class="reservation-form">
+          <div class="form-card">
+            <h2 class="form-title">Faça sua Reserva</h2>
+            <p class="form-subtitle">Preencha os dados abaixo para garantir sua mesa</p>
+
+            <form [formGroup]="reservaForm" class="reservation-form-fields">
+              <!-- Dados pessoais -->
+              <div class="form-section">
+                <h3 class="section-title">👤 Seus Dados</h3>
+
+                <div class="form-group">
+                  <label for="nome">Nome Completo *</label>
+                  <input
+                    type="text"
+                    id="nome"
+                    formControlName="nome"
+                    placeholder="Digite seu nome completo"
+                    [class.invalid]="f['nome'].invalid && f['nome'].touched">
+                  <div *ngIf="f['nome'].invalid && f['nome'].touched" class="error-message">
+                    <span *ngIf="f['nome'].errors?.['required']">Nome é obrigatório</span>
+                    <span *ngIf="f['nome'].errors?.['minlength']">Nome deve ter pelo menos 3 caracteres</span>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="email">E-mail *</label>
+                    <input
+                      type="email"
+                      id="email"
+                      formControlName="email"
+                      placeholder="seu@email.com"
+                      [class.invalid]="f['email'].invalid && f['email'].touched">
+                    <div *ngIf="f['email'].invalid && f['email'].touched" class="error-message">
+                      <span *ngIf="f['email'].errors?.['required']">E-mail é obrigatório</span>
+                      <span *ngIf="f['email'].errors?.['email']">Digite um e-mail válido</span>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="telefone">Telefone *</label>
+                    <input
+                      type="tel"
+                      id="telefone"
+                      formControlName="telefone"
+                      placeholder="(11) 99999-9999"
+                      [class.invalid]="f['telefone'].invalid && f['telefone'].touched">
+                    <div *ngIf="f['telefone'].invalid && f['telefone'].touched" class="error-message">
+                      <span *ngIf="f['telefone'].errors?.['required']">Telefone é obrigatório</span>
+                      <span *ngIf="f['telefone'].errors?.['pattern']">Digite um telefone válido</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Detalhes da reserva -->
+              <div class="form-section">
+                <h3 class="section-title">📅 Detalhes da Reserva</h3>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="data">Data *</label>
+                    <input
+                      type="date"
+                      id="data"
+                      formControlName="data"
+                      [min]="dataMinima"
+                      [max]="dataMaxima"
+                      [class.invalid]="f['data'].invalid && f['data'].touched">
+                    <div *ngIf="f['data'].invalid && f['data'].touched" class="error-message">
+                      Data é obrigatória
+                    </div>
+                    <div class="date-info">
+                      <span *ngIf="dataEhHoje" class="info-today">🗓️ Hoje</span>
+                      <span *ngIf="dataEhFimDeSemana" class="info-weekend">🎉 Fim de semana</span>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="hora">Horário *</label>
+                    <select
+                      id="hora"
+                      formControlName="hora"
+                      [class.invalid]="f['hora'].invalid && f['hora'].touched">
+                      <option *ngFor="let hora of horariosDisponiveis" [value]="hora">
+                        {{ formatarHora(hora) }}
+                      </option>
+                    </select>
+                    <div *ngIf="f['hora'].invalid && f['hora'].touched" class="error-message">
+                      Horário é obrigatório
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="numeroPessoas">Número de Pessoas *</label>
+                    <div class="people-selector">
+                      <button
+                        type="button"
+                        class="btn-people"
+                        (click)="decrementarPessoas()"
+                        [disabled]="f['numeroPessoas'].value <= minPessoas">
+                        −
+                      </button>
+
+                      <input
+                        type="number"
+                        id="numeroPessoas"
+                        formControlName="numeroPessoas"
+                        [min]="minPessoas"
+                        [max]="maxPessoas"
+                        class="people-input"
+                        readonly>
+
+                      <button
+                        type="button"
+                        class="btn-people"
+                        (click)="incrementarPessoas()"
+                        [disabled]="f['numeroPessoas'].value >= maxPessoas">
+                        +
+                      </button>
+                    </div>
+                    <div class="people-info">
+                      <span>Mínimo: {{ minPessoas }} | Máximo: {{ maxPessoas }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Disponibilidade -->
+                <div class="availability-check" *ngIf="f['data'].value && f['hora'].value">
+                  <div class="availability-status" [class.available]="horarioDisponivel" [class.unavailable]="!horarioDisponivel">
+                    <span class="status-icon">
+                      {{ verificandoDisponibilidade ? '⏳' : (horarioDisponivel ? '✅' : '❌') }}
+                    </span>
+                    <span class="status-text">
+                      {{ verificandoDisponibilidade ? 'Verificando disponibilidade...' :
+                         (horarioDisponivel ? 'Horário disponível!' : 'Horário indisponível') }}
+                    </span>
+                  </div>
+                  <div *ngIf="!horarioDisponivel" class="availability-suggestions">
+                    <p>Sugestões de horários próximos:</p>
+                    <div class="suggested-times">
+                      <button
+                        *ngFor="let hora of getHorariosAlternativos()"
+                        type="button"
+                        class="btn-time-suggestion"
+                        (click)="selecionarHorarioAlternativo(hora)">
+                        {{ formatarHora(hora) }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Observações -->
+              <div class="form-section">
+                <h3 class="section-title">📝 Observações</h3>
+                <div class="form-group">
+                  <label for="observacoes">Observações Especiais</label>
+                  <textarea
+                    id="observacoes"
+                    formControlName="observacoes"
+                    placeholder="Alergias, aniversário, ocasião especial, etc."
+                    rows="3"></textarea>
+                  <div class="textarea-info">
+                    <span>Nos informe se há alguma necessidade especial</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Botão de reserva -->
+              <div class="form-actions">
+                <button
+                  type="button"
+                  class="btn btn-primary btn-reserve"
+                  (click)="enviarReserva()"
+                  [disabled]="reservaForm.invalid || !horarioDisponivel || carregando">
+                  <span *ngIf="!carregando">✅ Confirmar Reserva</span>
+                  <span *ngIf="carregando">⏳ Processando...</span>
+                </button>
+
+                <div class="form-note">
+                  <span class="note-icon">ℹ️</span>
+                  <span class="note-text">
+                    Você receberá uma confirmação por e-mail.
+                    Reservas podem ser canceladas até 2 horas antes.
+                  </span>
+                </div>
+              </div>
+            </form>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Confirmação da reserva -->
+    <div *ngIf="reservaRealizada && reservaConfirmada" class="reservation-confirmation">
+      <div class="confirmation-card">
+        <div class="confirmation-header">
+          <div class="confirmation-icon">🎉</div>
+          <h2>Reserva Confirmada!</h2>
+          <p class="confirmation-subtitle">Sua mesa está reservada na Trattoria Bella Italia</p>
+        </div>
+
+        <div class="confirmation-details">
+          <!-- Número da reserva -->
+          <div class="detail-section highlight">
+            <h3>Número da Reserva</h3>
+            <div class="reservation-number">{{ numeroReserva }}</div>
+            <p class="detail-note">Guarde este número para referência</p>
+          </div>
+
+          <!-- Detalhes da reserva -->
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-label">👤 Nome</span>
+              <span class="detail-value">{{ reservaConfirmada.nome }}</span>
+            </div>
+
+            <div class="detail-item">
+              <span class="detail-label">📅 Data</span>
+              <span class="detail-value">{{ formatarData(reservaConfirmada.data.toString()) }}</span>
+            </div>
+
+            <div class="detail-item">
+              <span class="detail-label">⏰ Horário</span>
+              <span class="detail-value">{{ formatarHora(reservaConfirmada.hora) }}</span>
+            </div>
+
+            <div class="detail-item">
+              <span class="detail-label">👥 Pessoas</span>
+              <span class="detail-value">{{ reservaConfirmada.numeroPessoas }} pessoa(s)</span>
+            </div>
+
+            <div class="detail-item">
+              <span class="detail-label">📞 Telefone</span>
+              <span class="detail-value">{{ reservaConfirmada.telefone }}</span>
+            </div>
+
+            <div class="detail-item">
+              <span class="detail-label">✉️ E-mail</span>
+              <span class="detail-value">{{ reservaConfirmada.email }}</span>
+            </div>
+          </div>
+
+          <!-- Observações -->
+          <div *ngIf="reservaConfirmada.observacoes" class="detail-section">
+            <h3>Observações</h3>
+            <p class="observations">{{ reservaConfirmada.observacoes }}</p>
+          </div>
+
+          <!-- Informações importantes -->
+          <div class="important-info">
+            <h3>📋 Informações Importantes</h3>
+            <div class="info-list">
+              <div class="info-item">
+                <span class="info-icon">⏰</span>
+                <span class="info-text">Chegue 10 minutos antes do horário reservado</span>
+              </div>
+              <div class="info-item">
+                <span class="info-icon">🔄</span>
+                <span class="info-text">Cancelamento gratuito até 2 horas antes</span>
+              </div>
+              <div class="info-item">
+                <span class="info-icon">📧</span>
+                <span class="info-text">Confirmação enviada para {{ reservaConfirmada.email }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ações -->
+        <div class="confirmation-actions">
+          <button class="btn btn-primary" (click)="fazerNovaReserva()">
+            📅 Fazer Outra Reserva
+          </button>
+          <button class="btn btn-secondary" routerLink="/home">
+            🏠 Voltar para Início
+          </button>
+        </div>
+
+        <!-- Contato -->
+        <div class="confirmation-contact">
+          <p>Precisa de ajuda? Ligue para nós: <strong>(11) 9999-9999</strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

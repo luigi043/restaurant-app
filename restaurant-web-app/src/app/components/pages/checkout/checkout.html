@@ -296,9 +296,9 @@
               <div class="summary-section">
                 <h3>💳 Forma de Pagamento</h3>
                 <div class="summary-content">
-                  <p><strong>Método:</strong>
-                    {{ metodosPagamento.find(m => m.id === metodoPagamentoSelecionado)?.nome }}
-                  </p>
+                 <p><strong>Método:</strong>
+                  {{ getNomeMetodoPagamento() }}
+                </p>
                   <p *ngIf="metodoPagamentoSelecionado === 'cartao'">
                     <strong>Cartão:</strong>
                     **** **** **** {{ pagamentoForm.get('numeroCartao')?.value?.slice(-4) }}

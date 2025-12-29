@@ -1,1 +1,324 @@
-<p>dish-detail works!</p>
+<div class="dish-detail-page">
+  <!-- Cabeçalho da página -->
+  <header class="page-header" *ngIf="prato">
+    <div class="container">
+      <button class="btn-back" (click)="voltarParaCardapio()">
+        ← Voltar para Cardápio
+      </button>
+      <h1 class="page-title">{{ prato.nome }}</h1>
+      <div class="page-subtitle">
+        <span class="category-badge">
+          {{ getCategoriaIcon(prato.categoria) }}
+          {{ prato.categoria | titlecase }}
+        </span>
+        <span class="price-badge">{{ formatarPreco(prato.preco) }}</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="container dish-detail-container">
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="carregando">
+      <div class="loading-spinner"></div>
+      <p>Carregando detalhes do prato...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="error-state" *ngIf="erro && !carregando">
+      <div class="error-icon">❌</div>
+      <h2>Prato não encontrado</h2>
+      <p>{{ mensagemErro }}</p>
+      <button class="btn btn-primary" (click)="voltarParaCardapio()">
+        Voltar para Cardápio
+      </button>
+    </div>
+
+    <!-- Conteúdo do prato -->
+    <div *ngIf="prato && !carregando && !erro" class="dish-content">
+      <div class="dish-layout">
+        <!-- Imagem principal -->
+        <div class="dish-image-section">
+          <div class="image-container">
+            <img [src]="prato.imagem" [alt]="prato.nome" class="dish-main-image">
+
+            <!-- Badges -->
+            <div class="image-badges">
+              <span *ngIf="isDestaque" class="badge destaque">
+                ⭐ Destaque
+              </span>
+              <span *ngIf="isVegetariano" class="badge vegetariano">
+                🌱 Vegetariano
+              </span>
+              <span *ngIf="isPicante" class="badge picante">
+                🌶️ Picante
+              </span>
+            </div>
+          </div>
+
+          <!-- Miniaturas (poderia ter múltiplas imagens) -->
+          <div class="image-thumbnails">
+            <div class="thumbnail active">
+              <img [src]="prato.imagem" [alt]="prato.nome + ' - vista 1'">
+            </div>
+            <!-- Em uma aplicação real, teríamos mais imagens aqui -->
+          </div>
+        </div>
+
+        <!-- Informações do prato -->
+        <div class="dish-info-section">
+          <!-- Título e preço -->
+          <div class="dish-header">
+            <h1 class="dish-title">{{ prato.nome }}</h1>
+            <div class="dish-price">
+              <span class="price">{{ formatarPreco(prato.preco) }}</span>
+              <span class="price-note">Preço unitário</span>
+            </div>
+          </div>
+
+          <!-- Avaliação (fake) -->
+          <div class="dish-rating">
+            <div class="stars">
+              <span class="star">⭐</span>
+              <span class="star">⭐</span>
+              <span class="star">⭐</span>
+              <span class="star">⭐</span>
+              <span class="star">⭐</span>
+              <span class="rating-value">4.8</span>
+            </div>
+            <span class="rating-count">(128 avaliações)</span>
+          </div>
+
+          <!-- Descrição curta -->
+          <p class="dish-short-description">{{ prato.descricao }}</p>
+
+          <!-- Informações rápidas -->
+          <div class="dish-quick-info">
+            <div class="info-item">
+              <span class="info-icon">⏱️</span>
+              <div class="info-content">
+                <span class="info-label">Tempo de preparo</span>
+                <span class="info-value">{{ prato.tempoPreparo }} minutos</span>
+              </div>
+            </div>
+
+            <div class="info-item" *ngIf="prato.calorias">
+              <span class="info-icon">🔥</span>
+              <div class="info-content">
+                <span class="info-label">Calorias</span>
+                <span class="info-value">{{ prato.calorias }} kcal</span>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <span class="info-icon">🍽️</span>
+              <div class="info-content">
+                <span class="info-label">Categoria</span>
+                <span class="info-value">{{ prato.categoria | titlecase }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Controle de quantidade -->
+          <div class="quantity-section">
+            <h3 class="section-title">Quantidade</h3>
+            <div class="quantity-controls">
+              <button
+                class="btn-quantity btn-decrease"
+                (click)="diminuirQuantidade()"
+                [disabled]="quantidade <= minQuantidade"
+                aria-label="Diminuir quantidade">
+                −
+              </button>
+
+              <input
+                type="number"
+                [value]="quantidade"
+                (change)="atualizarQuantidade($event)"
+                [min]="minQuantidade"
+                [max]="maxQuantidade"
+                class="quantity-input"
+                aria-label="Quantidade">
+
+              <button
+                class="btn-quantity btn-increase"
+                (click)="aumentarQuantidade()"
+                [disabled]="quantidade >= maxQuantidade"
+                aria-label="Aumentar quantidade">
+                +
+              </button>
+            </div>
+            <div class="quantity-info">
+              <span>Total: <strong>{{ formatarPreco(calcularTotal()) }}</strong></span>
+            </div>
+          </div>
+
+          <!-- Botões de ação -->
+          <div class="action-buttons">
+            <button
+              class="btn btn-primary btn-add-cart"
+              (click)="adicionarAoCarrinho()">
+              🛒 Adicionar ao Carrinho
+            </button>
+
+            <button
+              class="btn btn-secondary btn-buy-now"
+              (click)="comprarAgora()">
+              🚀 Comprar Agora
+            </button>
+          </div>
+
+          <!-- Informações de entrega -->
+          <div class="delivery-info">
+            <div class="info-item">
+              <span class="info-icon">🚚</span>
+              <span class="info-text">Entrega em 30-45 minutos</span>
+            </div>
+            <div class="info-item">
+              <span class="info-icon">🔄</span>
+              <span class="info-text">Troca ou cancelamento grátis</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detalhes do prato (abas) -->
+      <div class="dish-details-section">
+        <!-- Navegação das abas -->
+        <div class="details-tabs">
+          <button
+            class="tab-btn"
+            [class.active]="modoVisualizacao === 'descricao'"
+            (click)="mudarModoVisualizacao('descricao')">
+            📖 Descrição
+          </button>
+
+          <button
+            class="tab-btn"
+            [class.active]="modoVisualizacao === 'ingredientes'"
+            (click)="mudarModoVisualizacao('ingredientes')">
+            🥕 Ingredientes
+          </button>
+
+          <button
+            class="tab-btn"
+            [class.active]="modoVisualizacao === 'nutricional'"
+            (click)="mudarModoVisualizacao('nutricional')"
+            [disabled]="!prato.calorias">
+            📊 Informação Nutricional
+          </button>
+        </div>
+
+        <!-- Conteúdo das abas -->
+        <div class="details-content">
+          <!-- Descrição -->
+          <div *ngIf="modoVisualizacao === 'descricao'" class="tab-content description">
+            <h3>Sobre este prato</h3>
+            <p>{{ prato.descricao }}</p>
+
+            <div class="preparation-info" *ngIf="prato.tempoPreparo">
+              <h4>⏱️ Preparação</h4>
+              <p>Este prato é preparado em aproximadamente {{ prato.tempoPreparo }} minutos por nossos chefs especializados.</p>
+            </div>
+
+            <div class="origin-info">
+              <h4>🇮🇹 Origem Italiana</h4>
+              <p>Receita tradicional italiana preparada com ingredientes importados e técnicas autênticas.</p>
+            </div>
+          </div>
+
+          <!-- Ingredientes -->
+          <div *ngIf="modoVisualizacao === 'ingredientes'" class="tab-content ingredients">
+            <h3>🥕 Ingredientes</h3>
+
+            <div class="ingredients-list">
+              <div *ngFor="let ingrediente of prato.ingredientes" class="ingredient-item">
+                <span class="ingredient-icon">✓</span>
+                <span class="ingredient-name">{{ ingrediente }}</span>
+              </div>
+            </div>
+
+            <div class="allergens-info" *ngIf="isVegetariano">
+              <h4>🌱 Informações sobre Alergênicos</h4>
+              <p>Este prato é <strong>vegetariano</strong> e pode conter:</p>
+              <ul>
+                <li>Lactose (queijos italianos)</li>
+                <li>Glúten (massas tradicionais)</li>
+                <li *ngIf="contemOvo()">Ovos</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Informação Nutricional -->
+          <div *ngIf="modoVisualizacao === 'nutricional' && prato.calorias" class="tab-content nutritional">
+            <h3>📊 Informação Nutricional</h3>
+
+            <div class="nutritional-facts">
+              <div class="fact-item main">
+                <span class="fact-label">Valor Energético</span>
+                <span class="fact-value">{{ prato.calorias }} kcal</span>
+              </div>
+
+              <div class="fact-item">
+                <span class="fact-label">Porção</span>
+                <span class="fact-value">1 unidade</span>
+              </div>
+
+              <!-- Valores fictícios para demonstração -->
+              <div class="fact-item">
+                <span class="fact-label">Carboidratos</span>
+                <span class="fact-value">45g</span>
+              </div>
+
+              <div class="fact-item">
+                <span class="fact-label">Proteínas</span>
+                <span class="fact-value">25g</span>
+              </div>
+
+              <div class="fact-item">
+                <span class="fact-label">Gorduras</span>
+                <span class="fact-value">15g</span>
+              </div>
+
+              <div class="fact-item">
+                <span class="fact-label">Fibras</span>
+                <span class="fact-value">8g</span>
+              </div>
+            </div>
+
+            <div class="nutritional-note">
+              <p>* Valores aproximados por porção. Valores podem variar conforme preparo.</p>
+            </div>
+          </div>
+
+          <div *ngIf="modoVisualizacao === 'nutricional' && !prato.calorias" class="tab-content nutritional">
+            <div class="no-nutritional-info">
+              <span class="info-icon">📊</span>
+              <h4>Informação nutricional não disponível</h4>
+              <p>As informações nutricionais para este prato ainda não foram cadastradas.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pratos relacionados -->
+      <div class="related-dishes-section" *ngIf="pratosRelacionados.length > 0">
+        <div class="section-header">
+          <h2 class="section-title">🍽️ Você também pode gostar</h2>
+          <p class="section-subtitle">Pratos similares da mesma categoria</p>
+        </div>
+
+        <div class="related-dishes-grid">
+          <div *ngFor="let pratoRelacionado of pratosRelacionados" class="related-dish-card">
+            <a [routerLink]="['/dish', pratoRelacionado.id]" class="dish-link">
+              <img [src]="pratoRelacionado.imagem" [alt]="pratoRelacionado.nome" class="dish-image">
+              <div class="dish-info">
+                <h3 class="dish-name">{{ pratoRelacionado.nome }}</h3>
+                <p class="dish-price">{{ formatarPreco(pratoRelacionado.preco) }}</p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

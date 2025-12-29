@@ -109,6 +109,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     });
   }
 
+
+  // Método para obter nome do método de pagamento
+getNomeMetodoPagamento(): string {
+  const metodo = this.metodosPagamento.find(m => m.id === this.metodoPagamentoSelecionado);
+  return metodo ? metodo.nome : 'Não selecionado';
+}
   gerarNumeroPedido() {
     const data = new Date();
     const timestamp = data.getTime();
