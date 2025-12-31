@@ -6,7 +6,7 @@
 
 Uma aplicação web moderna para um restaurante italiano, construída com Angular 17+. Oferece uma experiência completa de usuário com cardápio interativo, sistema de carrinho, reservas de mesa e checkout.
 ![alt text](image-1.png)
-![Screenshot da Aplicação](image.png)
+<img width="1918" height="992" alt="image" src="https://github.com/user-attachments/assets/58617839-c726-4380-bcd3-a2b7db973a2e" />
 
 ## ✨ Funcionalidades
 
